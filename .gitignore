@@ -1,0 +1,33 @@
+.idea
+.ipynb_checkpoints
+.mypy_cache
+.vscode
+.venv
+__pycache__
+.pytest_cache
+htmlcov
+dist
+site
+.coverage
+coverage.xml
+.netlify
+test.db
+log.txt
+Pipfile.lock
+env3.*
+env
+docs_build
+venv
+docs.zip
+archive.zip
+.venv
+*.ipynb
+
+# vim temporary files
+*~
+.*.sw?
+
+# Ignore archived depedencies that were created by the 'helm dependency' command
+charts/
+# Also ignore lock files
+Chart.lock
