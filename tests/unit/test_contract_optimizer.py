@@ -1,8 +1,11 @@
 """Module testing the contract_optimizer module."""
 from unittest.mock import patch
 
-from app.contract_optimizer import (find_optimal_path_and_income, find_optimum,
-                                    get_eligible_contracts)
+from app.contract_optimizer import (
+    find_optimal_path_and_income,
+    find_optimum,
+    get_eligible_contracts,
+)
 
 
 @patch("app.contract_optimizer.find_optimum")
