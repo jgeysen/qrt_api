@@ -30,11 +30,12 @@ To run the app with docker, one needs to have the Docker Daemon running. If this
 the case, one can simply run `make server` from within the `qrt_api` directory. This 
 command will build a docker image with -only- the strictly necessary packages installed
 to run the app and spin up a container which exposes the endpoint on port `8080`.
+To stop the server, run `make down`.
 
 ### With a virtual environment
 
 To run the app from within a virtual environment, one needs to have the dependency
-manager `poetry` installed and a version of python `3.10`. 
+manager `poetry` installed and a version of python `3.10` (for example with `pyenv`). 
 
 If these requirements are met, one can install the app by following the next steps:
 
@@ -85,7 +86,7 @@ to run the tests and spin up a container which executes the `pytest` command.
 ### With a virtual environment
 
 To run the tests from within a virtual environment, one needs to have the dependency
-manager `poetry` installed and a version of python `3.10`. 
+manager `poetry` installed and a version of python `3.10` (for example with `pyenv`). 
 
 If these requirements are met, one can run the tests by following the next steps:
 
@@ -107,3 +108,6 @@ the search. Worst case scenario, all the branches are still calculated with the
 overhead of calculating the heuristic. 
 - In docker, the app is running as root. This is a potential security risk and should 
 be addressed. 
+- Write end2end tests. These tests would spin up the server and talk to the endpoint 
+and follow a very similar pattern as the `Interact with the endpoint` example earlier 
+in this `README.md`.
