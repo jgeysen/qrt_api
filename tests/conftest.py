@@ -6,6 +6,12 @@ from app.models import Contract
 
 @pytest.fixture(scope="module")
 def unsorted_contracts_fixture():
+    """
+    Fixture returning the list of contracts as given in the assignment.
+
+    Returns:
+        List[dict]: A list of contracts.
+    """
     contracts = [
         {"name": "Contract1", "start": 0, "duration": 5, "price": 10},
         {"name": "Contract2", "start": 3, "duration": 7, "price": 14},
@@ -17,6 +23,13 @@ def unsorted_contracts_fixture():
 
 @pytest.fixture(scope="module")
 def sorted_contracts_fixture():
+    """
+    Fixture returning the list of contracts as given in the assignment. Also,
+    the `end` key is added to each contract, indicating when the contract ends.
+
+    Returns:
+        List[dict]: A list of contracts.
+    """
     contracts = [
         {"name": "Contract1", "start": 0, "end": 5, "duration": 5, "price": 10},
         {"name": "Contract2", "start": 3, "end": 10, "duration": 7, "price": 14},
@@ -28,6 +41,13 @@ def sorted_contracts_fixture():
 
 @pytest.fixture(scope="module")
 def contracts_multiple_at_start_fixture():
+    """
+    Fixture returning a list of contracts where multiple contracts start
+    at hour 0.
+
+    Returns:
+        List[dict]: A list of contracts.
+    """
     contracts = [
         {"name": "Contract1", "start": 0, "end": 1, "duration": 5, "price": 10},
         {"name": "Contract2", "start": 0, "end": 2, "duration": 7, "price": 14},
@@ -39,6 +59,13 @@ def contracts_multiple_at_start_fixture():
 
 @pytest.fixture(scope="module")
 def contracts_overlapping_fixture():
+    """
+    Fixture returning a list of contracts which are only overlapping in time,
+    but with different hourly prices.
+
+    Returns:
+        List[dict]: A list of contracts.
+    """
     contracts = [
         {"name": "Contract1", "start": 0, "end": 5, "duration": 5, "price": 10},
         {"name": "Contract2", "start": 0, "end": 5, "duration": 5, "price": 11},
@@ -49,6 +76,16 @@ def contracts_overlapping_fixture():
 
 @pytest.fixture(scope="module")
 def unsorted_contract_models_fixture(unsorted_contracts_fixture):
+    """
+    Fixture returning a list of contract models. This is the input of the
+    `spaceship_optimizer` method in the `app/app.py` module.
+
+    Args:
+        List[dict]: The unsorted contracts fixture is used here to create the
+        contract models.
+    Returns:
+        List[Contract]: A list of contract models.
+    """
     contract_models = []
     for contract in unsorted_contracts_fixture:
         contract_models.append(Contract.parse_obj(contract))

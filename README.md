@@ -1,9 +1,9 @@
 # Spaceship Rental Optimization API
 
 A spaceship rental service with only a single spaceship for hire is facing a business 
-problem: multiple bookings are requested, some of which are overlapping and at different
-hourly rental prices. To find out what the optimal rental schedule looks like, the 
-Spaceship Rental Optimization API was build. 
+problem: multiple bookings are requested, some of which are overlapping and some of 
+which are at different hourly price points. To find out what the optimal rental 
+schedule looks like, the Spaceship Rental Optimization API was build. 
 
 The Spaceship Rental Optimization API has only a single endpoint which is able 
 to calculate the optimal rental period given a list of potential rental contracts.
@@ -28,8 +28,11 @@ virtual environment.
 
 To run the app with docker, one needs to have the Docker Daemon running. If this is
 the case, one can simply run `make server` from within the `qrt_api` directory. This 
-command will build a docker image with -only- the strictly necessary packages installed
-to run the app and spin up a container which exposes the endpoint on port `8080`.
+command will: 
+- Build a docker image with only the necessary packages installed
+to run the app. 
+- Spin up a container which exposes the endpoint on port `8080`.
+
 To stop the server, run `make down`.
 
 ### With a virtual environment
@@ -39,14 +42,14 @@ manager `poetry` installed and a version of python `3.10` (for example with `pye
 
 If these requirements are met, one can install the app by following the next steps:
 
-- Call `poetry install --no-dev` from the `qrt_api` directory, which will create a 
+- Run `poetry install --no-dev` from the `qrt_api` directory, which will create a 
 virtual environment.
 - Activate the virtual environment by running `source .venv/bin/activate`.
 - Start the app on port `8080` by running: `uvicorn app.app:app --host 0.0.0.0 --port 8080`
 
 ## Interact with the endpoint:
 
-The app only has a single endpoint and the following scripts shows how one can easily
+The app has only a single endpoint and the following scripts shows how one can easily
 interact with the app. 
 
 ```python
@@ -78,10 +81,13 @@ a virtual environment:
 
 ### With Docker
 
-To run the app with docker, one needs to have the Docker Daemon running. If this is
+To run the tests with docker, one needs to have the Docker Daemon running. If this is
 the case, one can simply run `make test` from within the `qrt_api` directory. This 
-command will build a docker image with the development packages installed
-to run the tests and spin up a container which executes the `pytest` command. 
+command will: 
+
+- Build a docker image with the development packages installed
+to run the tests. 
+- Spin up a container which executes the `pytest` command. 
 
 ### With a virtual environment
 
@@ -106,8 +112,10 @@ current income + this sum X is lower than the current income of another branch B
 the search, one could abandon branch A. A heuristic does require more overhead during 
 the search. Worst case scenario, all the branches are still calculated with the 
 overhead of calculating the heuristic. 
-- In docker, the app is running as root. This is a potential security risk and should 
-be addressed. 
+- When running the app in docker, the container is running as root. This is a 
+security risk and should be addressed. 
 - Write end2end tests. These tests would spin up the server and talk to the endpoint 
 and follow a very similar pattern as the `Interact with the endpoint` example earlier 
 in this `README.md`.
+- Write an `OptimalPath` class within the `app/contract_optimizer.py` module. This
+could avoid the use of the global variable `contracts`. 
