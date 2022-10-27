@@ -5,7 +5,9 @@ from pydantic import BaseModel
 
 
 class Contract(BaseModel):
-    """ """
+    """
+    Class to represent a contract.
+    """
 
     name: str
     start: int
@@ -14,7 +16,9 @@ class Contract(BaseModel):
 
 
 class OptimalPath(BaseModel):
-    """ """
+    """
+    Class to represent a dictionary containing an optimal path and income.
+    """
 
     income: int
     path: List[str]

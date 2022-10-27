@@ -15,7 +15,7 @@ def spaceship_optimizer(contracts: List[Contract]):
     highest income.
 
     Args:
-        contracts: a list of contracts.
+        contracts: a list of contracts according to the pydantic Contract model.
 
     Returns:
         dict[str]: dictionary containing the maximal obtainable income and the

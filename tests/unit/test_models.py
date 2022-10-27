@@ -3,6 +3,11 @@ from app.models import Contract, OptimalPath
 
 
 def test_contract():
+    """
+    Given input information for a Contract model,
+    When the Contract model is initialised,
+    Then the expected attributes are initialised.
+    """
     name = "Contract1"
     start = 1
     price = 2
@@ -16,6 +21,11 @@ def test_contract():
 
 
 def test_optimal_path():
+    """
+    Given input information for a OptimalPath model,
+    When the OptimalPath model is initialised,
+    Then the expected attributes are initialised.
+    """
     income = 10
     path = ["Contract1", "Contract2"]
     optimal_path = OptimalPath(income=income, path=path)

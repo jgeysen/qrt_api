@@ -16,7 +16,7 @@ def unsorted_contracts_fixture():
 
 
 @pytest.fixture(scope="module")
-def contracts_example_fixture():
+def sorted_contracts_fixture():
     contracts = [
         {"name": "Contract1", "start": 0, "end": 5, "duration": 5, "price": 10},
         {"name": "Contract2", "start": 3, "end": 10, "duration": 7, "price": 14},
@@ -48,7 +48,7 @@ def contracts_overlapping_fixture():
 
 
 @pytest.fixture(scope="module")
-def contract_models_fixture(unsorted_contracts_fixture):
+def unsorted_contract_models_fixture(unsorted_contracts_fixture):
     contract_models = []
     for contract in unsorted_contracts_fixture:
         contract_models.append(Contract.parse_obj(contract))
