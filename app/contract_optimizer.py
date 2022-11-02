@@ -26,7 +26,7 @@ def find_optimal_path_and_income(
     return income, path
 
 
-def get_next_eligible_contract(index: int = 0, start: int = 0) -> int:
+def get_next_eligible_contract_id(index: int = 0, start: int = 0) -> int:
     """Finds the next contract in the global variable list of contracts.
 
     The next contract starts at the given `start` hour or right after.
@@ -72,7 +72,7 @@ def find_optimum(start: int = 0, index: int = 0) -> tuple[int, List[str]]:
         combination of contracts.
 
     """
-    next_eligible_contract_id = get_next_eligible_contract(index, start)
+    next_eligible_contract_id = get_next_eligible_contract_id(index, start)
     if next_eligible_contract_id == len(contracts):
         return 0, []
     next_eligible_contract = contracts[next_eligible_contract_id]

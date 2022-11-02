@@ -4,7 +4,7 @@ from unittest.mock import patch
 from app.contract_optimizer import (
     find_optimal_path_and_income,
     find_optimum,
-    get_next_eligible_contract,
+    get_next_eligible_contract_id,
 )
 
 
@@ -95,7 +95,7 @@ def test_find_optimum_only_overlapping(contracts_overlapping_fixture):
         assert path == ["Contract3"]
 
 
-def test_get_next_eligible_contract_example_start_0(sorted_contracts_fixture):
+def test_get_next_eligible_contract_id_example_start_0(sorted_contracts_fixture):
     """
     Given a list of sorted contracts,
     When the `get_eligible_contracts` method is called where the eligible contracts can
@@ -103,11 +103,11 @@ def test_get_next_eligible_contract_example_start_0(sorted_contracts_fixture):
     Then all contracts are returned.
     """
     with patch("app.contract_optimizer.contracts", sorted_contracts_fixture):
-        contract_id = get_next_eligible_contract(0, 0)
+        contract_id = get_next_eligible_contract_id(0, 0)
         assert contract_id == 0
 
 
-def test_get_next_eligible_contract_example_start_5(sorted_contracts_fixture):
+def test_get_next_eligible_contract_id_example_start_5(sorted_contracts_fixture):
     """
     Given a list of sorted contracts,
     When `get_eligible_contracts` method is called where the eligible contracts
@@ -115,11 +115,11 @@ def test_get_next_eligible_contract_example_start_5(sorted_contracts_fixture):
     Then only the contracts which start after or on hour 5 are returned.
     """
     with patch("app.contract_optimizer.contracts", sorted_contracts_fixture):
-        contract_id = get_next_eligible_contract(0, 5)
+        contract_id = get_next_eligible_contract_id(0, 5)
         assert contract_id == 2
 
 
-def test_get_next_eligible_contract_multiple_start_3(
+def test_get_next_eligible_contract_id_multiple_start_3(
     contracts_multiple_at_start_fixture,
 ):
     """
@@ -129,5 +129,5 @@ def test_get_next_eligible_contract_multiple_start_3(
     Then only the contracts which start after or on hour 3 are returned.
     """
     with patch("app.contract_optimizer.contracts", contracts_multiple_at_start_fixture):
-        contract_id = get_next_eligible_contract(0, 3)
+        contract_id = get_next_eligible_contract_id(0, 3)
         assert contract_id == 3
