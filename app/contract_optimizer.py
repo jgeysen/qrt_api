@@ -24,7 +24,7 @@ def find_optimal_path_and_income(unsorted_contracts: List[dict]):
     return income, path
 
 
-def get_eligible_contracts(index: int = 0, start: int = 0):
+def get_next_eligible_contract(index: int = 0, start: int = 0) -> int:
     """Finds the next contract in the global variable list of contracts.
 
     The next contract starts at the given `start` hour or right after
@@ -39,12 +39,12 @@ def get_eligible_contracts(index: int = 0, start: int = 0):
         List[dict]: List of contracts which start on or after the given
         `start` hour.
     """
-    remaining_contracts = contracts[index:]
-    i = 0
-    while i < len(remaining_contracts):
-        if remaining_contracts[i].get("start") >= start:
-            return remaining_contracts[i:]
-        i += 1
+    while index < len(contracts):
+        if contracts[index].get("start") >= start:
+            return index
+        index += 1
+
+    return len(contracts)
 
 
 def find_optimum(start: int = 0, index: int = 0):
@@ -70,10 +70,10 @@ def find_optimum(start: int = 0, index: int = 0):
         combination of contracts.
 
     """
-    eligible_contracts = get_eligible_contracts(index, start)
-    if not eligible_contracts:
+    i = get_next_eligible_contract(index, start)
+    if i == len(contracts):
         return 0, []
-    next_eligible_contract = eligible_contracts[0]
+    next_eligible_contract = contracts[i]
 
     # First case: the `next_eligible_contract` is part of the solution,
     # so we move the start value to the end of the `next_eligible_contract`

@@ -4,7 +4,7 @@ from unittest.mock import patch
 from app.contract_optimizer import (
     find_optimal_path_and_income,
     find_optimum,
-    get_eligible_contracts,
+    get_next_eligible_contract,
 )
 
 
@@ -95,7 +95,7 @@ def test_find_optimum_only_overlapping(contracts_overlapping_fixture):
         assert path == ["Contract3"]
 
 
-def test_get_eligible_contracts_example_start_0(sorted_contracts_fixture):
+def test_get_next_eligible_contract_example_start_0(sorted_contracts_fixture):
     """
     Given a list of sorted contracts,
     When the `get_eligible_contracts` method is called where the eligible contracts can
@@ -103,36 +103,29 @@ def test_get_eligible_contracts_example_start_0(sorted_contracts_fixture):
     Then all contracts are returned.
     """
     with patch("app.contract_optimizer.contracts", sorted_contracts_fixture):
-        contracts = get_eligible_contracts(0, 0)
-        assert contracts == sorted_contracts_fixture
+        contract_id = get_next_eligible_contract(0, 0)
+        assert contract_id == 0
 
 
-def test_get_eligible_contracts_example_start_5(sorted_contracts_fixture):
+def test_get_next_eligible_contract_example_start_5(sorted_contracts_fixture):
     """
     Given a list of sorted contracts,
     When `get_eligible_contracts` method is called where the eligible contracts
     should start on or after hour 5,
     Then only the contracts which start after or on hour 5 are returned.
     """
-    result = [
-        {"name": "Contract3", "start": 5, "end": 14, "duration": 9, "price": 8},
-        {"name": "Contract4", "start": 6, "end": 15, "duration": 9, "price": 7},
-    ]
     with patch("app.contract_optimizer.contracts", sorted_contracts_fixture):
-        contracts = get_eligible_contracts(0, 5)
-        assert contracts == result
+        contract_id = get_next_eligible_contract(0, 5)
+        assert contract_id == 2
 
 
-def test_get_eligible_contracts_multiple_start_3(contracts_multiple_at_start_fixture):
+def test_get_next_eligible_contract_multiple_start_3(contracts_multiple_at_start_fixture):
     """
     Given a list of contracts where multiple contracts start at hour 0,
     When `get_eligible_contracts` method is called where the eligible contracts
     should start on or after hour 3,
     Then only the contracts which start after or on hour 3 are returned.
     """
-    result = [
-        {"name": "Contract4", "start": 6, "end": 15, "duration": 9, "price": 7},
-    ]
     with patch("app.contract_optimizer.contracts", contracts_multiple_at_start_fixture):
-        contracts = get_eligible_contracts(0, 3)
-        assert contracts == result
+        contract_id = get_next_eligible_contract(0, 3)
+        assert contract_id == 3
