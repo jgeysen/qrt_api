@@ -119,7 +119,9 @@ def test_get_next_eligible_contract_example_start_5(sorted_contracts_fixture):
         assert contract_id == 2
 
 
-def test_get_next_eligible_contract_multiple_start_3(contracts_multiple_at_start_fixture):
+def test_get_next_eligible_contract_multiple_start_3(
+    contracts_multiple_at_start_fixture,
+):
     """
     Given a list of contracts where multiple contracts start at hour 0,
     When `get_eligible_contracts` method is called where the eligible contracts

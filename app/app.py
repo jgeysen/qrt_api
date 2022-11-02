@@ -10,7 +10,7 @@ app = FastAPI()
 
 
 @app.post("/spaceship/optimize", response_model=OptimalPath)
-def spaceship_optimizer(contracts: List[Contract]):
+def spaceship_optimizer(contracts: List[Contract]) -> dict[str]:
     """Returns the optimal combination of contracts which result in the
     highest income.
 

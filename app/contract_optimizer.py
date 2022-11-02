@@ -4,7 +4,9 @@ from typing import List
 contracts = []
 
 
-def find_optimal_path_and_income(unsorted_contracts: List[dict]):
+def find_optimal_path_and_income(
+    unsorted_contracts: List[dict],
+) -> tuple[int, List[str]]:
     """Finds the optimal path and income among a list of unsorted contracts.
 
     Args:
@@ -47,7 +49,7 @@ def get_next_eligible_contract(index: int = 0, start: int = 0) -> int:
     return len(contracts)
 
 
-def find_optimum(start: int = 0, index: int = 0):
+def find_optimum(start: int = 0, index: int = 0) -> tuple[int, List[str]]:
     """Finds the optimal combination of contracts in the global variable
     `contracts`.
 
