@@ -1,4 +1,4 @@
-from contract_optimizer import find_optimal_path_and_income
+from app.contract_optimizer import find_optimal_path_and_income
 
 
 contracts = [
