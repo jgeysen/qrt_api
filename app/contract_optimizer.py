@@ -27,8 +27,7 @@ def find_optimal_path_and_income(unsorted_contracts: List[dict]):
 def get_next_eligible_contract(index: int = 0, start: int = 0) -> int:
     """Finds the next contract in the global variable list of contracts.
 
-    The next contract starts at the given `start` hour or right after
-    and returns all contracts which start on or after this next contract.
+    The next contract starts at the given `start` hour or right after.
 
     Args:
         start: All contracts in `contracts` which start on or after `start`
@@ -36,8 +35,9 @@ def get_next_eligible_contract(index: int = 0, start: int = 0) -> int:
         index: Only contracts after the id `index` are scanned, for efficiency.
 
     Returns:
-        List[dict]: List of contracts which start on or after the given
-        `start` hour.
+        int: index of the next contract which starts on or after the `start`
+        argument. The returned index is capped at the length of the global `contracts`
+        variable.
     """
     while index < len(contracts):
         if contracts[index].get("start") >= start:
@@ -70,10 +70,10 @@ def find_optimum(start: int = 0, index: int = 0):
         combination of contracts.
 
     """
-    i = get_next_eligible_contract(index, start)
-    if i == len(contracts):
+    next_eligible_contract_id = get_next_eligible_contract(index, start)
+    if next_eligible_contract_id == len(contracts):
         return 0, []
-    next_eligible_contract = contracts[i]
+    next_eligible_contract = contracts[next_eligible_contract_id]
 
     # First case: the `next_eligible_contract` is part of the solution,
     # so we move the start value to the end of the `next_eligible_contract`
@@ -85,9 +85,9 @@ def find_optimum(start: int = 0, index: int = 0):
     # remaining contracts whilst disregarding the `next_eligible_contract`.
     income_2, path_2 = find_optimum(start, index + 1)
 
-    total_price_1 = next_eligible_contract.get("price") + income_1
-    if total_price_1 >= income_2:
-        path = [next_eligible_contract.get("name")] + path_1
-        return total_price_1, path
+    income_1 = next_eligible_contract.get("price") + income_1
+    if income_1 >= income_2:
+        path_1 = [next_eligible_contract.get("name")] + path_1
+        return income_1, path_1
 
     return income_2, path_2
