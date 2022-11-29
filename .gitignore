@@ -31,3 +31,6 @@ archive.zip
 charts/
 # Also ignore lock files
 Chart.lock
+
+*.bin
+*.html
