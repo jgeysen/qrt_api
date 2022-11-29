@@ -8,7 +8,7 @@ dev-build:
 	-t ${IMAGE_BASE_NAME}_dev:${ENVIRONMENT_HASH}
 
 test: dev-build
-	@docker run -it -v ${MNT_PATH}/app:/code/app \
+	@docker run -v ${MNT_PATH}/app:/code/app \
 	-v ${MNT_PATH}/tests:/code/tests \
 	${IMAGE_BASE_NAME}_dev:${ENVIRONMENT_HASH} pytest
 
