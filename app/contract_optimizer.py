@@ -46,8 +46,6 @@ def get_next_eligible_contract_id(index: int = 0, start: int = 0) -> int:
             return index
         index += 1
 
-    return len(contracts)
-
 
 def find_optimum(start: int = 0, index: int = 0) -> tuple[int, List[str]]:
     """Finds the optimal combination of contracts in the global variable
@@ -73,23 +71,38 @@ def find_optimum(start: int = 0, index: int = 0) -> tuple[int, List[str]]:
 
     """
     next_eligible_contract_id = get_next_eligible_contract_id(index, start)
-    if next_eligible_contract_id == len(contracts):
+    # if there's no next eligible contract:
+    if next_eligible_contract_id is None:
         return 0, []
-    next_eligible_contract = contracts[next_eligible_contract_id]
+    next_eligible_contract_1 = contracts[next_eligible_contract_id]
+    # if there's only 1 next eligible contract:
+    if next_eligible_contract_id == len(contracts) - 1:
+        return next_eligible_contract_1.get("price"), [
+            next_eligible_contract_1.get("name")
+        ]
+    next_eligible_contract_2 = contracts[next_eligible_contract_id + 1]
+
+    # if the next eligible contract ends before or on the time the contract after that
+    # starts, it is part of the solution and we can avoid the binary search.
+    if next_eligible_contract_1.get("end") <= next_eligible_contract_2.get("start"):
+        income_1, path_1 = find_optimum(next_eligible_contract_1.get("end"), index + 1)
+        path_1 = [next_eligible_contract_1.get("name")] + path_1
+        income_1 = next_eligible_contract_1.get("price") + income_1
+        return income_1, path_1
 
     # First case: the `next_eligible_contract` is part of the solution,
     # so we move the start value to the end of the `next_eligible_contract`
     # and move the index forward. Effectively calculating the optimum
     # of the remaining contracts after the `next_eligible_contract` has ended.
-    income_1, path_1 = find_optimum(next_eligible_contract.get("end"), index + 1)
+    income_1, path_1 = find_optimum(next_eligible_contract_1.get("end"), index + 1)
     # Second case: we discard the `next_eligible_contract` and keep the
     # start value as is. Effectively calculating the optimum of the
     # remaining contracts whilst disregarding the `next_eligible_contract`.
     income_2, path_2 = find_optimum(start, index + 1)
 
-    income_1 = next_eligible_contract.get("price") + income_1
+    income_1 = next_eligible_contract_1.get("price") + income_1
     if income_1 >= income_2:
-        path_1 = [next_eligible_contract.get("name")] + path_1
+        path_1 = [next_eligible_contract_1.get("name")] + path_1
         return income_1, path_1
 
     return income_2, path_2
