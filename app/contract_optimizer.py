@@ -1,5 +1,6 @@
 """Module defining the methods to find the optimal path of contracts."""
 from typing import List
+from app.models import Contract
 
 contracts = []
 solution_cache = {}
@@ -51,6 +52,35 @@ def get_next_eligible_contract_id(index: int = 0, start: int = 0) -> int:
     return len(contracts)
 
 
+def get_best_contract(index) -> Contract:
+    """Returns the contract which is better (= shorter or equal in length, but
+    more lucrative) than the contract given by index. All contracts which
+
+    - Start at the same time or after the contract given by index,
+    - End at the same time or before the contract given by index
+
+    are searched.
+
+    Args:
+        index: Contract index.
+
+    Returns:
+        Contract: The most lucrative contract which starts after and ends before
+        the contract given by the contract index.
+    """
+    best_contract = contracts[index]
+    end = best_contract.get("end")
+    while index < len(contracts):
+        contract = contracts[index]
+        if contract.get("end") <= end and contract.get("price") > best_contract.get(
+            "price"
+        ):
+            best_contract = contract
+        index += 1
+
+    return best_contract
+
+
 def find_optimum(start: int = 0, index: int = 0) -> tuple[int, List[str]]:
     """Finds the optimal combination of contracts in the global variable
     `contracts`.
@@ -72,35 +102,30 @@ def find_optimum(start: int = 0, index: int = 0) -> tuple[int, List[str]]:
         int: The total price of the most optimal contract combination.
         List[str]: List of contract names, which make up the  optimal
         combination of contracts.
-
     """
+    if start in solution_cache:
+        income, path = solution_cache.get(start)
+        return income, path
+
     next_eligible_contract_id = get_next_eligible_contract_id(index, start)
     if next_eligible_contract_id == len(contracts):
         return 0, []
-    next_eligible_contract_1 = contracts[next_eligible_contract_id]
+    next_eligible_contract = contracts[next_eligible_contract_id]
 
-    # First case: the `next_eligible_contract` is part of the solution,
-    # so we move the start value to the end of the `next_eligible_contract`
-    # and move the index forward. Effectively calculating the optimum
-    # of the remaining contracts after the `next_eligible_contract` has ended.
-    if next_eligible_contract_1.get("end") in solution_cache:
-        income_1, path_1 = solution_cache.get(next_eligible_contract_1.get("end"))
-    else:
-        income_1, path_1 = find_optimum(next_eligible_contract_1.get("end"), index + 1)
-        solution_cache.update({next_eligible_contract_1.get("end"): (income_1, path_1)})
+    if next_eligible_contract.get("end") in solution_cache:
+        income, path = solution_cache.get(next_eligible_contract.get("end"))
+        best_contract = get_best_contract(next_eligible_contract_id)
+        return income + best_contract.get("price"), [best_contract.get("name")] + path
 
-    # Second case: we discard the `next_eligible_contract` and keep the
-    # start value as is. Effectively calculating the optimum of the
-    # remaining contracts whilst disregarding the `next_eligible_contract`.
-    if start in solution_cache:
-        income_2, path_2 = solution_cache.get(start)
     else:
+        income_1, path_1 = find_optimum(next_eligible_contract.get("end"), index + 1)
         income_2, path_2 = find_optimum(start, index + 1)
-        solution_cache.update({start: (income_2, path_2)})
 
-    income_1 = next_eligible_contract_1.get("price") + income_1
-    if income_1 >= income_2:
-        path_1 = [next_eligible_contract_1.get("name")] + path_1
-        return income_1, path_1
-
-    return income_2, path_2
+        income_1 = next_eligible_contract.get("price") + income_1
+        if income_1 >= income_2:
+            path = [next_eligible_contract.get("name")] + path_1
+            solution_cache.update({start: (income_1, path)})
+            return income_1, path
+        else:
+            solution_cache.update({start: (income_2, path_2)})
+            return income_2, path_2

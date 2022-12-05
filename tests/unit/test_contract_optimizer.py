@@ -1,5 +1,7 @@
 """Module testing the contract_optimizer module."""
+import sys
 from unittest.mock import patch
+import timeit
 
 from app.contract_optimizer import (
     find_optimal_path_and_income,
@@ -27,6 +29,7 @@ def test_find_optimal_path_and_income(
     assert mock_find_optimum.called_once_with(0, 0)
 
 
+@patch("app.contract_optimizer.solution_cache", {})
 def test_find_optimum_example(sorted_contracts_fixture):
     """
     Given a sorted list of contracts,
@@ -39,6 +42,7 @@ def test_find_optimum_example(sorted_contracts_fixture):
         assert path == ["Contract1", "Contract3"]
 
 
+@patch("app.contract_optimizer.solution_cache", {})
 def test_find_optimum_single_contract():
     """
     Given a list of a single contract,
@@ -55,6 +59,7 @@ def test_find_optimum_single_contract():
         assert path == ["Contract1"]
 
 
+@patch("app.contract_optimizer.solution_cache", {})
 def test_find_optimum_no_contract():
     """
     Given an empty list,
@@ -69,6 +74,7 @@ def test_find_optimum_no_contract():
         assert path == []
 
 
+@patch("app.contract_optimizer.solution_cache", {})
 def test_find_optimum_multiple_at_start(contracts_multiple_at_start_fixture):
     """
     Given a list of contracts where most of the contracts start at hour 0,
@@ -82,6 +88,7 @@ def test_find_optimum_multiple_at_start(contracts_multiple_at_start_fixture):
         assert path == ["Contract2", "Contract4"]
 
 
+@patch("app.contract_optimizer.solution_cache", {})
 def test_find_optimum_only_overlapping(contracts_overlapping_fixture):
     """
     Given a list of overlapping contracts,
@@ -93,6 +100,19 @@ def test_find_optimum_only_overlapping(contracts_overlapping_fixture):
         total_price, path = find_optimum(0, 0)
         assert total_price == 12
         assert path == ["Contract3"]
+
+
+@patch("app.contract_optimizer.solution_cache", {})
+def test_find_optimum_5k_contracts(sorted_contracts_5k_fixture):
+    """
+    Given a list of 5000 contracts,
+    When the `find_optimum` method is called starting from hour 0 and index 0,
+    Then the method finishes successfully under 5 seconds.
+    """
+    with patch("app.contract_optimizer.contracts", sorted_contracts_5k_fixture):
+        sys.setrecursionlimit(len(sorted_contracts_5k_fixture) * 2)
+        exec_time = timeit.timeit("find_optimum(0, 0)", number=1, globals=globals())
+        assert exec_time < 5
 
 
 def test_get_next_eligible_contract_id_example_start_0(sorted_contracts_fixture):

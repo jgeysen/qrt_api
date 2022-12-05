@@ -1,5 +1,6 @@
 """Module defining fixtures used in testing the app."""
 import pytest
+from random import randint
 
 from app.models import Contract
 
@@ -91,3 +92,48 @@ def unsorted_contract_models_fixture(unsorted_contracts_fixture):
         contract_models.append(Contract.parse_obj(contract))
 
     return contract_models
+
+
+@pytest.fixture(scope="module")
+def sorted_contracts_5k_fixture():
+    """
+    Fixture returning a list of contract models. This is the input of the
+    `spaceship_optimizer` method in the `app/app.py` module.
+
+    Args:
+        List[dict]: The unsorted contracts fixture is used here to create the
+        contract models.
+    Returns:
+        List[Contract]: A list of contract models.
+    """
+    contracts = [
+        {
+            "name": f"contract_{i}",
+            "start": i,
+            "price": randint(1, 10),
+            "end": i + randint(1, 10),
+        }
+        for i in range(5000)
+    ]
+
+    return contracts
+
+
+@pytest.fixture(scope="module")
+def sorted_contracts_20_fixture():
+    """
+    Fixture returning a list of contract models. This is the input of the
+    `spaceship_optimizer` method in the `app/app.py` module.
+
+    Args:
+        List[dict]: The unsorted contracts fixture is used here to create the
+        contract models.
+    Returns:
+        List[Contract]: A list of contract models.
+    """
+    contracts = [
+        {"name": f"contract_{i}", "start": i, "price": randint(1, 10), "end": i + 1}
+        for i in range(20)
+    ]
+
+    return contracts
