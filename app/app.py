@@ -3,7 +3,7 @@ from typing import List
 
 from fastapi import FastAPI
 
-from app.contract_optimizer import find_optimal_path_and_income
+from app.contract_optimizer import ContractOptimiser
 from app.models import Contract, OptimalPath
 
 app = FastAPI()
@@ -22,5 +22,6 @@ def spaceship_optimizer(contracts: List[Contract]) -> dict[str]:
         path of contract names to realise that income.
     """
     contracts = [c.dict() for c in contracts]
-    income, path = find_optimal_path_and_income(contracts)
+    contract_optimiser = ContractOptimiser(contracts=contracts)
+    income, path = contract_optimiser.find_optimum()
     return {"income": income, "path": path}
