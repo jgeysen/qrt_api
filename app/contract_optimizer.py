@@ -30,6 +30,7 @@ class ContractOptimiser:
             List[str]: List of contract names, which make up the  optimal
             combination of contracts.
         """
+        # if the solution is in the cache, return solution:
         income, path = self._solution_cache.get(start, (0, []))
         if income and path:
             return income, path
@@ -37,26 +38,35 @@ class ContractOptimiser:
         first_contract_id = self._get_next_eligible_contract_id(start, index)
         second_contract_id = self._get_next_eligible_contract_id(start, index + 1)
 
+        # if there is no next eligible contract, return the base case:
         if first_contract_id == len(self.contracts):
             return 0, []
 
         first_contract = self.sorted_contracts[first_contract_id]
         first_contract["end"] = first_contract["start"] + first_contract["duration"]
 
+        # if there's no second eligible contract, return first/only eligible contract:
         if second_contract_id == len(self.contracts):
             return first_contract.get("price"), [first_contract.get("name")]
 
         second_contract = self.sorted_contracts[second_contract_id]
-        income, path = self._solution_cache.get(first_contract.get("end"), (0, []))
 
-        if income and second_contract.get("start") >= first_contract.get("end"):
-            return (
-                first_contract.get("price") + income,
-                [first_contract.get("name")] + path,
-            )
-        else:
+        # check if the optimal solution at the end of the next eligible
+        # contract is cached. If it isn't, calculate it.
+        income_1, path_1 = self._solution_cache.get(first_contract.get("end"), (0, []))
+        if not income_1:
             income_1, path_1 = self.find_optimum(first_contract.get("end"), index + 1)
 
+        # if the second eligible contract starts on or after the end of the first
+        # eligible contract, the solution is known:
+        if second_contract.get("start") >= first_contract.get("end"):
+            return (
+                first_contract.get("price") + income_1,
+                [first_contract.get("name")] + path_1,
+            )
+
+        # calculate the optimal solution where the start value is the same,
+        # but the searchable contract ids are reduced by 1 contract:
         income_2, path_2 = self.find_optimum(start, index + 1)
 
         income_1 = first_contract.get("price") + income_1
