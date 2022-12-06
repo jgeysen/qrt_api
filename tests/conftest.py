@@ -1,6 +1,7 @@
 """Module defining fixtures used in testing the app."""
-import pytest
 from random import randint
+
+import pytest
 
 from app.models import Contract
 
@@ -50,9 +51,9 @@ def contracts_multiple_at_start_fixture():
         List[dict]: A list of contracts.
     """
     contracts = [
-        {"name": "Contract1", "start": 0, "end": 1, "duration": 5, "price": 10},
-        {"name": "Contract2", "start": 0, "end": 2, "duration": 7, "price": 14},
-        {"name": "Contract3", "start": 0, "end": 3, "duration": 9, "price": 8},
+        {"name": "Contract1", "start": 0, "end": 1, "duration": 1, "price": 10},
+        {"name": "Contract2", "start": 0, "end": 2, "duration": 2, "price": 14},
+        {"name": "Contract3", "start": 0, "end": 3, "duration": 3, "price": 8},
         {"name": "Contract4", "start": 6, "end": 15, "duration": 9, "price": 7},
     ]
     return contracts
@@ -95,7 +96,7 @@ def unsorted_contract_models_fixture(unsorted_contracts_fixture):
 
 
 @pytest.fixture(scope="module")
-def sorted_contracts_5k_fixture():
+def sorted_contracts_1k_fixture():
     """
     Fixture returning a list of contract models. This is the input of the
     `spaceship_optimizer` method in the `app/app.py` module.
@@ -111,9 +112,9 @@ def sorted_contracts_5k_fixture():
             "name": f"contract_{i}",
             "start": i,
             "price": randint(1, 10),
-            "end": i + randint(1, 10),
+            "duration": randint(1, 10),
         }
-        for i in range(5000)
+        for i in range(1000)
     ]
 
     return contracts

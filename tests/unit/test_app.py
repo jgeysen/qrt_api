@@ -4,11 +4,10 @@ from unittest.mock import patch
 from app.app import spaceship_optimizer
 
 
-@patch("app.app.find_optimal_path_and_income")
+@patch("app.app.ContractOptimiser.find_optimum")
 def test_spaceship_optimizer(
-    mock_find_optimal_path_and_income,
+    mock_contract_optimiser_find_optimum,
     unsorted_contract_models_fixture,
-    unsorted_contracts_fixture,
 ):
     """
     Given a list of contract models, a list of unsorted contracts and
@@ -18,11 +17,10 @@ def test_spaceship_optimizer(
     Then the mocked method is called with the unsorted contracts and the
     mocked return values are asserted.
     """
-    mock_find_optimal_path_and_income.return_value = (10, ["Contract1", "Contract2"])
+    return_value = (10, ["Contract1", "Contract2"])
+    mock_contract_optimiser_find_optimum.return_value = return_value
     result = spaceship_optimizer(unsorted_contract_models_fixture)
 
-    assert mock_find_optimal_path_and_income.called_once_with(
-        unsorted_contracts_fixture
-    )
+    assert mock_contract_optimiser_find_optimum.called_once()
     assert result.get("income") == 10
     assert result.get("path") == ["Contract1", "Contract2"]

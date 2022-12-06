@@ -17,7 +17,7 @@ black = "^22.10.0"                              # MIT
 isort = "^5.10.1"                               # MIT
 mypy = "^0.982"                                 # MIT
 pre-commit = "^2.20.0"                          # MIT
-pylint = "^2.8.2"                               # GPL, but only used as a tool
+pylint = "^2.8.2"                               # GPL
 pylint-quotes = "^0.2.0"                        # MIT
 pytest = "^7.1.3"                               # MIT
 pytest-cov = "^4.0.0"                           # MIT
@@ -28,6 +28,12 @@ pytest-lazy-fixture = "^0.6.3"                  # MIT
 flake8 = "^5.0.4"                               # MIT
 flake8-docstrings = "^1.6.0"                    # MIT
 darglint = "^1.8.1"                             # MIT
+
+[tool.pytest.ini_options]
+addopts = "-m 'not performance'"
+markers = [
+    "performance: mark a test as a performance test (deselect with '-m \"not performance\"')",
+]
 
 [build-system]
 requires = ["poetry>=0.12"]
