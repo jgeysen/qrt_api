@@ -88,6 +88,7 @@ command will:
 - Build a docker image with the development packages installed
 to run the tests. 
 - Spin up a container which executes the `pytest` command. 
+- Optionally, if one wishes to run the perfomance tests, run `pytest -m performance`.
 
 ### With a virtual environment
 
@@ -100,18 +101,12 @@ If these requirements are met, one can run the tests by following the next steps
 virtual environment with the dev packages installed. 
 - Activate the virtual environment by running `source .venv/bin/activate`.
 - Run `pytest`.
+- Optionally, if one wishes to run the perfomance tests, run `pytest -m performance`.
 
 ## Roadmap
 
 Given more time and resources, following improvements could be made to the API:
 
-- To make the search for the most optimal solution more efficient, one could
-add a heuristic to the paths. A possible heuristic could be: the sum X of the prices 
-of the remaining contracts. At any point during the search, when for branch A the 
-current income + this sum X is lower than the current income of another branch B of 
-the search, one could abandon branch A. A heuristic does require more overhead during 
-the search. Worst case scenario, all the branches are still calculated with the 
-overhead of calculating the heuristic. 
 - When running the app in docker, the container is running as root. This is a 
 security risk and should be addressed. 
 - Write end2end tests. These tests would spin up the server and talk to the endpoint 
